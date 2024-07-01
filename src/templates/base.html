@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Moviehub{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-pVlG3hIK4OBQ+6w2OU1a7PGyDl6Wkk8xkpX7PVdOY4OFbQ17FmGw7M5Jy6Swv21k4z0KqPcE4ivpKYYA3+GeaQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<body class="bg-dark text-light">
+    <header class="container-fluid mt-4 ml-2">
+        <div class="row mb-3 align-items-center">
+            <div class="col-md-2 text-center">
+                <a href="{% url 'index' %}" class="header-link text-light" style="text-decoration:none">
+                    <h1>Moviehub</h1>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        Groups
+                    </button>
+                    <ul class="dropdown-menu" data-bs-theme="dark">
+                        {% for group in groups %}
+                            <li>
+                                <button type="button" class="dropdown-item" type="button" onclick="location.href='{% url 'group' slug=group.slug %}'">{{ group.name }}</button>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-7 d-flex justify-content-end gap-4 pe-4">
+                <button class="btn btn-primary ml-2" data-bs-toggle="modal" data-bs-target="#joinGroupModal">Join Group</button>
+                <button class="btn btn-success ml-2" data-bs-toggle="modal" data-bs-target="#createGroupModal">Create Group</button>
+            </div>
+        </div>
+    </header>
+
+    {% block content %}
+    {% endblock %}
+
+    <footer class="bg-dark text-light text-center py-3 mt-auto">
+        <p>&copy; 2024 Moviehub</p>
+    </footer>
+
+    <!-- Join Group Modal -->
+    <div class="modal fade" id="joinGroupModal" tabindex="-1" aria-labelledby="joinGroupModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark text-light">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="joinGroupModalLabel">Join group</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{% url 'join_group' %}">
+                        {% csrf_token %}
+                        <div class="form-group mb-3">
+                            <label class="mb-2" for="groupCode">Enter group code:</label>
+                            <input type="text" class="form-control bg-dark text-light" id="groupCode" name="code" required>
+                        </div>
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                            <button type="submit" class="btn btn-primary">Join</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Group Modal -->
+    <div class="modal fade" id="createGroupModal" tabindex="-1" aria-labelledby="createGroupModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark text-light">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createGroupModalLabel">Create group</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{% url 'create_group' %}">
+                        {% csrf_token %}
+                        <div class="form-group mb-3">
+                            <label class="mb-2" for="groupName">Enter group name:</label>
+                            <input type="text" class="form-control bg-dark text-light" id="groupName" name="name" required>
+                        </div>
+                        <div class="d-grid col-6 mx-auto">
+                            <button type="submit" class="btn btn-success">Create</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/9a7ffa9c75.js" crossorigin="anonymous"></script>
+    <script>
+        function submitForm(formId) {
+            document.getElementById(formId).submit();
+        }
+    </script>
+    {% block scripts %}
+    {% endblock %}
+</body>
+</html>
