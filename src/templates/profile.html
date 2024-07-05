@@ -22,6 +22,9 @@
                         <p>Titles watched: {{ movies_watched_count }}</p>
                         <p>Average score: {{ avg_score_across_groups.avg_score }}</p>
                     </div>
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-danger btn-sm" onclick="window.location.href='{% url 'logout' %}'">Log out</button>
+                    </div>
                 </div>
 
                 <div class="tab-pane fade" id="groupsTab">

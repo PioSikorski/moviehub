@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Avg, Count, Func
@@ -54,3 +54,9 @@ def profile(request):
         "movies_watched_count": scores_set_count,
     }
     return render(request, "profile.html", context)
+
+
+@login_required
+def logout_view(request):
+    logout(request)
+    return redirect("start")
