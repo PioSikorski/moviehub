@@ -1,5 +1,4 @@
 import re
-import urllib.parse
 
 
 def parse_title_to_url(title: str) -> str:
@@ -9,15 +8,22 @@ def parse_title_to_url(title: str) -> str:
     return title.lower()
 
 
+def format_title(title: str) -> str:
+    title = title.replace("&", "and")
+    return title
+
+
 def format_title_for_rotten_tomatoes(title: str) -> str:
     title = title.replace(" ", "_").replace("-", "")
     title = re.sub(r"_+", "_", title)
-    return urllib.parse.quote(title, safe="_")
+    title = format_title(title=title)
+    return title
 
 
 def format_title_for_metacritic(title: str) -> str:
     title = title.replace(" ", "-")
-    return urllib.parse.quote(title, safe="-")
+    title = format_title(title=title)
+    return title
 
 
 def get_rotten_url(title: str, media_type: str) -> str:

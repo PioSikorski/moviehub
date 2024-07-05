@@ -28,19 +28,21 @@ SECRET_KEY = env("DJANGO_KEY")
 RAPIDAPI_MOVIE_DB_KEY = env("RAPIDAPI_MOVIE_DB_KEY")
 RAPIDAPI_MOVIE_DB_HOST = env("RAPIDAPI_MOVIE_DB_HOST")
 
-# ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS")
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS")
 
-ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS = [
+    "https://basilisk-awaited-totally.ngrok-free.app",
+]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
 
 SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_AGE = 365 * 24 * 60 * 60
 
 CSRF_COOKIE_SECURE = True
 
 # Application definition
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -49,8 +51,16 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
+    "core",
     "movies",
+    "groups",
+    "user",
 ]
+
+AUTH_USER_MODEL = "user.User"
+
+LOGIN_URL = "start"
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -61,7 +71,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "movies.middleware.RequireNicknameMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -79,6 +88,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "groups.context_processors.user_groups",
             ],
         },
     },

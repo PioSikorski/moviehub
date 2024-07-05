@@ -1,0 +1,81 @@
+{% extends "core.html" %}
+
+{% block body %}
+<div class="d-flex align-items-center justify-content-center vh-100">
+    <div class="username-form text-light text-center w-100" style="max-width: 400px;">
+        <ul class="nav nav-tabs" style="border-bottom: none" id="authTab" role="tablist">
+            <li class="nav-item w-50 pb-3" role="presentation">
+                <a class="nav-link {% if auth_mode == 'login' %}active{% endif %} bg-dark text-light" id="login-tab" data-bs-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Login</a>
+            </li>
+            <li class="nav-item w-50" role="presentation">
+                <a class="nav-link {% if auth_mode == 'signup' %}active{% endif %} bg-dark text-light" id="signup-tab" data-bs-toggle="tab" href="#signup" role="tab" aria-controls="signup" aria-selected="false">Signup</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="authTabContent">
+            <!-- Login Form -->
+            <div class="tab-pane fade {% if auth_mode == 'login' %}show active{% endif %}" id="login" role="tabpanel" aria-labelledby="login-tab">
+                <form method="POST" action="{% url 'start' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username:</label>
+                        <input type="text" class="form-control bg-dark text-light" id="username" name="username" value="{{ login_form.username.value|default:'' }}" required>
+                        {% if auth_mode == 'login' and login_form.username.errors %}
+                            <div class="text-danger mt-2">
+                                {{ login_form.username.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="my-3">
+                        <label for="password" class="form-label">Password:</label>
+                        <input type="password" class="form-control bg-dark text-light" id="password" name="password" value="{{ login_form.password.value|default:'' }}" required>
+                        {% if auth_mode == 'login' and login_form.password.errors %}
+                            <div class="text-danger mt-2">
+                                {{ login_form.password.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <button type="submit" name="login" class="btn btn-primary w-100">Login</button>
+                    </div>
+                </form>
+            </div>
+            <!-- Signup Form -->
+            <div class="tab-pane fade {% if auth_mode == 'signup' %}show active{% endif %}" id="signup" role="tabpanel" aria-labelledby="signup-tab">
+                <form method="POST" action="{% url 'start' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username:</label>
+                        <input type="text" class="form-control bg-dark text-light" id="username" name="username" value="{{ signup_form.username.value|default:'' }}" required>
+                        {% if auth_mode == 'signup' and signup_form.username.errors %}
+                            <div class="text-danger mt-2">
+                                {{ signup_form.username.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="password1" class="form-label">Password:</label>
+                        <input type="password" class="form-control bg-dark text-light" id="password1" name="password1" value="{{ signup_form.password1.value|default:'' }}" required>
+                        {% if auth_mode == 'signup' and signup_form.password1.errors %}
+                            <div class="text-danger mt-2">
+                                {{ signup_form.password1.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="my-3">
+                        <label for="password2" class="form-label">Confirm Password:</label>
+                        <input type="password" class="form-control bg-dark text-light" id="password2" name="password2" value="{{ signup_form.password2.value|default:'' }}" required>
+                        {% if auth_mode == 'signup' and signup_form.password2.errors %}
+                            <div class="text-danger mt-2">
+                                {{ signup_form.password2.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <button type="submit" name="signup" class="btn btn-primary w-100">Signup</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

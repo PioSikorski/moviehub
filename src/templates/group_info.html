@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ group.name }} - stats{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <a href="{% url 'group' slug=group.slug %}" class="text-light" style="text-decoration:none"><h1>{{ group.name }}</h1></a>
+                    <h6>Members:
+                        {% for member in group.members.all %}
+                            {{ member }}{% if not forloop.last %},{% endif %}
+                        {% endfor %}
+                    </h6>
+                </div>
+                <div>
+                    <button class="btn btn-success sm-4" type="button" onclick="codeToClipboard('{{ group.code }}')">Invite to group</button>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-4 text-center">
+                    <h5>All movies</h5>
+                    <h6>{{ group_movies_count }}</h6>
+                </div>
+                <div class="col-md-4 text-center">
+                    <h5>watched</h5>
+                    <h6>{{ watched_movies_count }}</h6>
+                </div>
+                <div class="col-md-4 text-center">
+                    <h5>not watched yet</h5>
+                    <h6>{{ not_watched_movies_count }}</h6>
+                </div>
+            </div>
+
+            <div class="my-4">
+                <h5>Users average score</h5>
+                <ul class="list-group">
+                    {% for avg_score in users_avg_score %}
+                        <li class="list-group-item bg-dark text-light d-flex justify-content-between align-items-center mt-2">
+                            {{ avg_score.user__username }}
+                            <span>{{ avg_score.avg_score }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function codeToClipboard(code) {
+        navigator.clipboard.writeText(code);
+        alert("Group code copied to clipboard");
+    }
+</script>
+{% endblock %}

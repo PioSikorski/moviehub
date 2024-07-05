@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+    .placeholder-light::placeholder {
+        color: rgba(255, 255, 255, 0.5); /* Adjust opacity as needed */
+    }
+</style>
 <main class="container justify-content-center align-items-center">
     <div class="row mt-4">
         <div class="col-md-12">
@@ -8,7 +13,7 @@
                 <form id="searchForm" method="POST" action="{% url 'search_movies' %}">
                     {% csrf_token %}
                     <div class="input-group">
-                        <input type="text" class="form-control bg-dark text-light" name="query" placeholder="Search movies..." aria-describedby="button-addon2">
+                        <input type="text" class="form-control bg-dark text-light placeholder-light" name="query" placeholder="Search movies..." aria-label="Search movies..." aria-describedby="button-addon2">
                         <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
                             <i class="fas fa-search"></i>
                         </button>
@@ -45,7 +50,7 @@
                     var groupDropdown = `
                         <div class="dropdown mt-3 d-grid col-6 mx-auto">
                             <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton_${movie.imdbID}" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Add to watch
+                                Add to group
                             </button>
                             <div class="dropdown-menu" data-bs-theme="dark" aria-labelledby="dropdownMenuButton_${movie.imdbID}">
                                 {% for group in groups %}
