@@ -1,16 +1,17 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Avg, Count, Func
 from django.shortcuts import redirect, render
 from groups.models import UserScore
 
-from .forms import SignUpForm
+from .forms import AuthForm, SignUpForm
 
 
 def start_view(request):
     signup_form = SignUpForm()
-    login_form = AuthenticationForm()
+    login_form = AuthForm()
+
+    auth_mode = "signup" if "signup" in request.POST else "login"
 
     if request.method == "POST":
         if "signup" in request.POST:
@@ -22,16 +23,23 @@ def start_view(request):
                 user = authenticate(username=username, password=raw_password)
                 if user is not None:
                     login(request, user)
-                return redirect("index")
+                    return redirect("index")
+
         elif "login" in request.POST:
-            login_form = AuthenticationForm(request, data=request.POST)
+            login_form = AuthForm(request, data=request.POST)
             if login_form.is_valid():
                 user = login_form.get_user()
                 login(request, user)
                 return redirect("index")
 
     return render(
-        request, "start.html", {"signup_form": signup_form, "login_form": login_form}
+        request,
+        "start.html",
+        {
+            "signup_form": signup_form,
+            "login_form": login_form,
+            "auth_mode": auth_mode,
+        },
     )
 
 
