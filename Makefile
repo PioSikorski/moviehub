@@ -9,6 +9,9 @@ build:
 up: build
 	$(COMPOSE) up
 
+stop:
+	$(COMPOSE) stop
+
 down:
 	$(COMPOSE) down --rmi all --volumes --remove-orphans
 

@@ -1,0 +1,24 @@
+name: ci/cd on rpi
+
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+  build-and-test:
+    runs-on: self-hosted
+
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run tests
+        run: make test
+
+      - name: Deploy
+        run: |
+          cd /Documents/projects/moviehub
+          bash deploy.sh
