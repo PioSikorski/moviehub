@@ -11,6 +11,7 @@ User = get_user_model()
 class GroupViewsTests(TestCase):
     @classmethod
     def setUpClass(cls):
+        super().setUpClass()
         cls.user = User.objects.create_user(username="testuser", password="testpass")
 
         cls.group = Group.objects.create(name="Test Group")
@@ -52,6 +53,7 @@ class GroupViewsTests(TestCase):
         User.objects.filter(username="testuser2").delete()
         Group.objects.filter(name="Test Group").delete()
         Movie.objects.filter(imdb_id="tt1234567").delete()
+        super().tearDownClass()
 
     def setUp(self):
         self.client = Client()
@@ -101,3 +103,20 @@ class GroupViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, 302)
         self.assertNotIn(self.user, self.group.members.all())
+
+    def test_generate_invite_link(self):
+        response = self.client.get(
+            reverse("generate_invite_link", args=[self.group.slug])
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("invite_link", response.json())
+
+    def test_join_group_by_link(self):
+        invite_link_code = self.group.code
+        self.client.logout()
+        self.client.login(username="testuser2", password="testpass2")
+        response = self.client.get(
+            reverse("join_group_by_link", args=[invite_link_code])
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(self.user2, self.group.members.all())

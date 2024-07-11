@@ -29,6 +29,7 @@
                 <form method="POST" action="{% url 'start' %}">
                     {% csrf_token %}
                     {{ login_form.as_p }}
+                    <input type="hidden" name="next" value="{{ next }}">
                     <div class="mb-3">
                         <button type="submit" name="login" class="btn btn-primary w-100">Login</button>
                     </div>
@@ -39,6 +40,7 @@
                 <form method="POST" action="{% url 'start' %}">
                     {% csrf_token %}
                     {{ signup_form.as_p }}
+                    <input type="hidden" name="next" value="{{ next }}">
                     <div class="mb-3">
                         <button type="submit" name="signup" class="btn btn-primary w-100">Signup</button>
                     </div>

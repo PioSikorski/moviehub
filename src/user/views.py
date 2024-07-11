@@ -12,8 +12,10 @@ def start_view(request):
     login_form = AuthForm()
 
     auth_mode = "signup" if "signup" in request.POST else "login"
+    next_url = request.GET.get("next")
 
     if request.method == "POST":
+        next_url = request.POST.get("next", "")
         if "signup" in request.POST:
             signup_form = SignUpForm(request.POST)
             if signup_form.is_valid():
@@ -23,6 +25,8 @@ def start_view(request):
                 user = authenticate(username=username, password=raw_password)
                 if user is not None:
                     login(request, user)
+                    if next_url:
+                        return redirect(next_url)
                     return redirect("index")
 
         elif "login" in request.POST:
@@ -30,6 +34,8 @@ def start_view(request):
             if login_form.is_valid():
                 user = login_form.get_user()
                 login(request, user)
+                if next_url:
+                    return redirect(next_url)
                 return redirect("index")
 
     return render(
@@ -39,6 +45,7 @@ def start_view(request):
             "signup_form": signup_form,
             "login_form": login_form,
             "auth_mode": auth_mode,
+            "next": next_url,
         },
     )
 

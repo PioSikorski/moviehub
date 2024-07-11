@@ -1,7 +1,9 @@
 from django.contrib.auth.decorators import login_required
-from django.db.models import Avg, Func
+from django.db.models import Avg, Count
+from django.db.models.functions import Round
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.views.decorators.http import require_POST
 from movies.models import Movie
 
@@ -22,6 +24,25 @@ def create_group(request):
 
     form = GroupForm()
     return redirect("index")
+
+
+@login_required
+@group_member_required
+def generate_invite_link(request, slug):
+    group = get_object_or_404(Group, slug=slug)
+    invite_link = request.build_absolute_uri(
+        reverse("join_group_by_link", kwargs={"code": group.code})
+    )
+    return JsonResponse({"invite_link": invite_link})
+
+
+@login_required
+def join_group_by_link(request, code):
+    group = get_object_or_404(Group, code=code)
+    user = request.user
+    if user not in group.members.all():
+        group.members.add(user)
+    return redirect("group", slug=group.slug)
 
 
 @group_member_required
@@ -120,24 +141,23 @@ def group_info(request, slug):
     group_memberships = GroupMembership.objects.filter(group=group).select_related(
         "user"
     )
-    user_scores = UserScore.objects.filter(group=group)
-
-    users_avg_score = user_scores.values("user__username").annotate(
-        avg_score=Func(
-            Avg("score"), function="ROUND", template="%(function)s(%(expressions)s, 1)"
-        )
-    )
     group_movies = GroupMovie.objects.filter(group=group)
     watched_movies_count = group_movies.filter(watched=True).count()
     not_watched_movies_count = group_movies.filter(watched=False).count()
 
+    user_scores_info = (
+        UserScore.objects.filter(group=group)
+        .values("user__username")
+        .annotate(score_count=Count("score"), avg_score=Round(Avg("score"), 1))
+    )
+
     context = {
         "group": group,
         "group_membership": group_memberships,
-        "users_avg_score": users_avg_score,
         "group_movies_count": group_movies.count(),
         "watched_movies_count": watched_movies_count,
         "not_watched_movies_count": not_watched_movies_count,
+        "user_scores_info": user_scores_info,
     }
 
     return render(request, "group_info.html", context)
