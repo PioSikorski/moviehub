@@ -3,7 +3,7 @@
 {% block content %}
 <style>
     .placeholder-light::placeholder {
-        color: rgba(255, 255, 255, 0.5); /* Adjust opacity as needed */
+        color: rgba(255, 255, 255, 0.5);
     }
 </style>
 <main class="container justify-content-center align-items-center">
@@ -13,7 +13,7 @@
                 <form id="searchForm" method="POST" action="{% url 'search_movies' %}">
                     {% csrf_token %}
                     <div class="input-group">
-                        <input type="text" class="form-control bg-dark text-light placeholder-light" name="query" placeholder="Search movies..." aria-label="Search movies..." aria-describedby="button-addon2">
+                        <input type="text" class="form-control bg-dark text-light placeholder-light border-secondary" name="query" placeholder="Search title..." aria-label="Search title..." aria-describedby="button-addon2">
                         <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
                             <i class="fas fa-search"></i>
                         </button>
