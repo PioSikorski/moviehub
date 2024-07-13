@@ -15,6 +15,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Create .env.dev file
+        run: |
+          echo "DJANGO_KEY=${{ secrets.DJANGO_KEY }}" >> .env.dev
+          echo "DEBUG=${{ secrets.DEBUG }}" >> .env.dev
+          echo "DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }}" >> .env.dev
+          echo "RAPIDAPI_MOVIE_DB_KEY=${{ secrets.RAPIDAPI_MOVIE_DB_KEY }}" >> .env.dev
+          echo "RAPIDAPI_MOVIE_DB_HOST=${{ secrets.RAPIDAPI_MOVIE_DB_HOST }}" >> .env.dev
+
       - name: Run tests
         run: make test
 
