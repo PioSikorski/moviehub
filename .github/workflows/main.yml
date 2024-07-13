@@ -1,15 +1,13 @@
-name: ci/cd on rpi
+name: ci/cd on github actions and rpi
 
 on:
   push:
     branches:
       - main
 
-
 jobs:
   build-and-test:
-    runs-on: self-hosted
-
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
@@ -25,6 +23,14 @@ jobs:
 
       - name: Run tests
         run: make test
+
+  deploy:
+    runs-on: self-hosted
+    needs: build-and-test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Deploy
         run: |
