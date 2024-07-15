@@ -34,10 +34,7 @@ jobs:
     needs: build-and-test
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
       - name: Deploy
         run: |
-          cd /Documents/projects/moviehub
+          cd /home/peets/Documents/projects/moviehub
           bash deploy.sh

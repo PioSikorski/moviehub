@@ -1,6 +1,6 @@
 #!bin/bash
 
-cd /Documents/projects/moviehub || exit
+cd /home/peets/Documents/projects/moviehub || exit
 
 make stop
 
