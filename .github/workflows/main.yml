@@ -20,6 +20,11 @@ jobs:
           echo "DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }}" >> .env.dev
           echo "RAPIDAPI_MOVIE_DB_KEY=${{ secrets.RAPIDAPI_MOVIE_DB_KEY }}" >> .env.dev
           echo "RAPIDAPI_MOVIE_DB_HOST=${{ secrets.RAPIDAPI_MOVIE_DB_HOST }}" >> .env.dev
+          echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env.dev
+          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env.dev
+          echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> .env.dev
+          echo "POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}" >> .env.dev
+          echo "POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}" >> .env.dev
 
       - name: Run tests
         run: make test
