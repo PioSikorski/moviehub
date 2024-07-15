@@ -21,5 +21,5 @@ bash:
 test: build
 	$(COMPOSE) up -d
 	@trap '${COMPOSE} down' EXIT; \
-	$(COMPOSE) exec -T django python manage.py test -v 2
+	$(COMPOSE) exec -T django python manage.py test $(APP) -v 2
 	

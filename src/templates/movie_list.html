@@ -32,11 +32,12 @@
                             {% endif %}
                         </div>
                         <div class="col-md-3 mt-3 text-center">
-                            <i class="fa-regular fa-star fa-2x mb-2"></i>
                             {% if group_movie.movie.imdb_id in user_scores.keys %}
+                                <i class="fa-solid fa-star fa-2x mb-2"></i>
                                 <h4 data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-title="{% for score in user_scores|get_item:group_movie.movie.imdb_id %}{{ score.0 }}: {{ score.1 }}<br>{% endfor %}">{{ group_movie.average_score }}</h4>
                             {% else %}
-                                <h4 class="mt-4">{{ group_movie.average_score }}</h4>
+                                <i class="fa-regular fa-star fa-2x mb-2"></i>
+                                <h4>{{ group_movie.average_score }}</h4>
                             {% endif %}
                         </div>
                     </div>
